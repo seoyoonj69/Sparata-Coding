@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>상품 주문</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .order_expl {
+            text-align: left;
+            margin: auto;
+            width: 500px;
+            length: 500px;
+        }
+        
+        .rateInfo {
+            font-size : 16px;
+            color : blue;
+        }
+
+        .form-group {
+            margin: auto;
+            length: 500px;
+            width: 500px;
+            text-align: left;
+        }
+
+        .price {
+            font-size: 14pt;
+        }
+
+        .wrap {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+
+        $(document).ready(function hey() {
+            $.ajax({
+                type: "GET", 
+                url: "https://api.manana.kr/exchange/rate.json",
+                data: {},
+                success: function (response) {
+                    $('#rate').text(response['1']['rate'])
+                }
+            })
+        });
+
+        function hey() {
+            let name = $('#name').val()
+            if (name == '') {
+                alert('이름을 입력하세요');
+                return;
+            }
+
+            let count = $('#count').val()
+            if (count == '수량을 선택하세요') {
+                alert('수량을 선택하세요');
+                return;
+            }
+
+            let address = $('#address').val()
+            if (address == '') {
+                alert('주소를 입력하세요');
+                return;
+            }
+
+            let phone = $('#number').val()
+            let regPhone = /(01[0|1|6|9|7])[-](\d{3}|\d{4})[-](\d{4}$)/g;
+            if (phone == '') {
+                alert('전화번호를 입력하세요');
+                return;
+            } else if (!regPhone.test(phone)) {
+                alert('잘못된 휴대폰 형식입니다.\n올바른 형식으로 입력해주세요.\n예) 010-1236-1236');
+
+            }
+
+
+        }
+
+
+
+    </script>
+</head>
+
+<body>
+    <div class=wrap>
+        <div class=order_expl>
+            <img
+                src="https://lh3.googleusercontent.com/proxy/JH4LMB5g0CylQ-7C1-cn4kflNLU4YPlv6xTHZXoUVmlpMCSy7-0NCPD0-QHnZUxVzyFbgr3QAE0F4EHLqKlw1O31x9E1IT0Zj24qAUmlb5o76ean" />
+            <h2>건망고 주문하기 <span class=price> 가격:12365466원/개</span></h2>
+
+            <p>칼로리는 어마어마하게 높지만 한번 중독되면 끊을수없는 건망고를 주문하세요 </p>
+            <h5 class="rateInfo ">달러-원 환율 : <span id = "rate"></span></h5>
+        </div>
+        <div class=order_form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">주문자 이름</label>
+                <input id="name" type="email" class="form-control" aria-describedby="emailHelp">
+
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">주문 수량</label>
+                <select id="count" class="form-control">
+                    <option>수량을 선택하세요</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">주소지</label>
+                <input id="address" type="email" class="form-control" aria-describedby="emailHelp">
+
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">전화번호</label>
+                <input id="number" type="email" class="form-control" aria-describedby="emailHelp">
+
+            </div>
+            <button onclick="hey()" type="submit" class="btn btn-primary">주문하기</button>
+        </div>
+</body>
+
+</html>
