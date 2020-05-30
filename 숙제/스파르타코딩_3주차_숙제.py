@@ -9,10 +9,10 @@ data = requests.get('https://www.genie.co.kr/chart/top200?ditc=D&ymd=20200403&hh
 soup = BeautifulSoup(data.text, 'html.parser')
 
 # select를 이용해서, tr들을 불러오기
-trs = soup.select('#body-content > div.newest-list > div > table > tbody >tr')
+songs = soup.select('#body-content > div.newest-list > div > table > tbody >tr')
 
-for tr in trs:
-    title = tr.select_one('td.info > a.title.ellipsis').text.strip()
-    singer = tr.select_one('td.info > a.artist.ellipsis').text.strip()
-    rank = tr.select_one('td.number').text.strip()
+for song in songs:
+    title = song.select_one('td.info > a.title.ellipsis').text.strip()
+    singer = song.select_one('td.info > a.artist.ellipsis').text.strip()
+    rank = (song.select_one('td.number').text.strip().split('\n'))[0]
     print(rank[0:2],title,singer)
