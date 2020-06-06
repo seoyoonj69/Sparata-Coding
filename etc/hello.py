@@ -21,3 +21,7 @@ for movie in movies:
     a_tag = movie.select_one('td.title > div > a')
     if a_tag is not None:
         print(a_tag.text)
+
+        #old_content > table > tbody
+        #old_content > table > tbody > tr:nth-child(2) > td.title > div > a
+        #body-content > div.newest-list > div > table > tbody > tr:nth-child(1) > td.info > a.title.ellipsis

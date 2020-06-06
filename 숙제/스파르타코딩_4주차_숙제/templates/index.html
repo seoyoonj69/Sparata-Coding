@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>상품 주문</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Jua', sans-serif;
+        }
+
+        .orders {
+            text-align: left;
+            margin: auto;
+            width: 500px;
+            length: 500px;
+        }
+
+        .order_expl {
+            text-align: left;
+            margin: auto;
+            width: 500px;
+            length: 500px;
+        }
+
+        .rateInfo {
+            font-size: 16px;
+            color: blue;
+        }
+
+        .form-group {
+            margin: auto;
+            length: 500px;
+            width: 500px;
+            text-align: left;
+        }
+
+        .price {
+            font-size: 14pt;
+        }
+
+        .wrap {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#orders-box').html('');
+            listing();
+        });
+
+        function ordermango() {
+            let name = $('#name').val();
+            let count = $('#count').val();
+            let address = $('#address').val();
+            let phone = $('#phone').val();
+
+
+            if (name == '') {
+                alert('이름을 입력하세요');
+                return
+            } else if (count == '수량을 선택하세요') {
+                alert('수량을 선택하세요');
+                return
+            } else if (address == '') {
+                alert('주소를 입력하세요');
+                return
+            } else if (phone == '') {
+                alert('전화번호를 입력하세요');
+                return
+            }
+
+            console.log(name, count, address, phone)
+
+            $.ajax({
+                type: "POST",
+                url: "/orders",
+                data: { name_give: name, count_give: count, address_give: address, phone_give: phone },
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+        function listing() {
+		// 1. 리뷰 목록을 서버에 요청하기
+		// 2. 요청 성공 여부 확인하기
+		// 3. 요청 성공했을 때 리뷰를 올바르게 화면에 나타내기
+        
+        $.ajax({
+        type: "GET",
+        url: "/orders",
+        data: {},
+        success: function (response) {
+            if (response['result'] == 'success') {
+                let orders = response['all_orders'];
+                for (let i = 0; i < orders.length; i++){
+                    let name = orders[i]['name']
+                    let count = orders[i]['count']
+                    let address = orders[i]['address']
+                    let phone = orders[i]['phone']
+
+                    temp_html = `<tr>
+                                    <td>${name}</td>
+                                    <td>${count}</td>
+                                    <td>${address}</td>
+                                    <td>${phone}</td>
+                                </tr>`
+
+                $('#orders-box').append(temp_html)
+                }               
+
+            } else {
+                alert('리뷰를 받아오지 못했습니다');
+            }
+        }
+    })
+}
+
+    </script>
+</head>
+
+<body>
+    <div class=wrap>
+        <div class=order_expl>
+            <img
+                src="https://lh3.googleusercontent.com/proxy/XZ8eeJU9GfqFpISdY2IuEyf86XlgUaA3FLeJvEttmj1cWxkV3zt0E47_KXQl9UWuHFT4l3wTF2x0hTTCTw1EtcBayHRf03JhbXoBzou5MsT6-mzx" />
+            <h2>건망고 주문하기 <span class=price> 가격:12365466원/개</span></h2>
+
+            <p>칼로리는 어마어마하게 높지만 한번 중독되면 끊을수없는 건망고를 주문하세요 </p>
+            <h5 class="rateInfo ">달러-원 환율 : <span id="rate"></span></h5>
+        </div>
+        <div class=order_form>
+            <div class="form-group">
+                <label for="exampleInputEmail1">주문자 이름</label>
+                <input id="name" type="email" class="form-control" aria-describedby="emailHelp">
+
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">주문 수량</label>
+                <select id="count" class="form-control">
+                    <option>수량을 선택하세요</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">주소지</label>
+                <input id="address" type="email" class="form-control" aria-describedby="emailHelp">
+
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">전화번호</label>
+                <input id="phone" type="email" class="form-control" aria-describedby="emailHelp">
+
+            </div>
+            <button onclick="ordermango()" type="submit" class="btn btn-primary">주문하기</button>
+            <div class="orders">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="meta_info" scope="col">이름</th>
+                            <th class="meta_info" scope="col">수량</th>
+                            <th class="meta_info" scope="col">주소</th>
+                            <th class="meta_info" scope="col">전화번호</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-box">
+                        <tr>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                            <td>Otto</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</body>
+
+</html>
